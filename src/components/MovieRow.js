@@ -2,8 +2,8 @@ import React, {  useState} from 'react';
 import  './MovieRow.css';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { Card, Image } from 'semantic-ui-react';
-    
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import { GrClose, GrWindows } from 'react-icons/gr';
 
 var titleMovie;
 var overviewMovie;
@@ -13,15 +13,35 @@ var voteMovie;
 var titleSerie;
 var dateSeries;
 var sizeImgCard;
+var imagePri;
+var datefinal
 
 
 function MovieRow( {title, items}) {
+
+    dateMovie = new Date(dateMovie);
+    dateSeries = new Date(dateSeries);
+
+    console.log(overviewMovie)
+
+    if(isNaN(dateSeries)){
+        datefinal = dateMovie;
+    }
+    if(isNaN(dateMovie)){
+        datefinal = dateSeries;
+    }
+
+    if(overviewMovie == undefined){
+        overviewMovie = 'Sem Sinopse'
+    }
+
+    console.log(overviewMovie)
     
     const [showMe, setShowMe] = useState(false);
     const [scrolx, setScrolx] = useState(0);
-
-    if(Math.round(window.innerWidth) > 1500){
-        sizeImgCard = 400
+    console.log(window.innerWidth);
+    if(Math.round(window.innerWidth) > 1200){
+        sizeImgCard = '500'
     }else{
         sizeImgCard = 300
     }
@@ -47,52 +67,61 @@ function MovieRow( {title, items}) {
 
     return (
         <div className="movieRow">
-            
-           <h2 className="title--listing">
-               {/* Titulos das listas de filmes barra series */}
-               {title}
-           </h2>
-           
-           <div>
+           <div className="details">
                {
                 showMe?
                 // Detalhes de cada filme/Serie
-                    <div className="card" style={{
-                        width: window.innerWidth * 0.7,
-                        }}>
-                        <Card className="card--total">
-                            {/* Imagem do filme/Serie */}
-                            <Image src={`https://image.tmdb.org/t/p/w${sizeImgCard}${imageMovie}`} wrapped ui={false} alt={imageMovie} className="card--img" />
-                                <Card.Content>
-                                    {/* Titulo do filme/Serie */}
-                                    <Card.Header className="card--title">{titleMovie}{titleSerie}</Card.Header>
-                                        <Card.Meta>
-                                            {/* Data de lançamento de cada filme/Serie */}
-                                          <span className="card--date">Data de lançamento:  {dateMovie} {dateSeries}</span>
-                                        </Card.Meta>
-                                            <div className="card--title">
-                                                Descrição
-                                            </div>
-                                            {/* descrição do filme/Serie */}
-                                        <Card.Description className="card--overview">
-                                            {overviewMovie}
-                                        </Card.Description>
-                                    </Card.Content>
-                                    <Card.Content extra className="card--vote">
-                                        {/* Avalição do filme/Serie */}
-                                        Avaliação: {voteMovie}
-                                 </Card.Content>
-                                    {/* Botão de Fechar os detalhes do filme/serie */}
-                            <button onClick={()=> {
-                                    setShowMe(false)
-                                }} className="card--button">
-                                    Fechar
-                            </button>
-                        </Card>
+                            <section className="details--movie" style={{
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                backgroundImage: `url(https://image.tmdb.org/t/p/original${imageMovie})`
+                            }}>
+                                <div className="details--movie--vertical">
+                                    <table>
+                                        <tbody>
+                                            <tr >
+                                                <td>
+                                                <img 
+                                                src={`https://image.tmdb.org/t/p/w300${imagePri}`} 
+                                                alt={titleMovie}
+                                                 className="details--img"/>
+                                                </td>
+                                                <div className="details--title"> 
+                                                     {titleMovie}{titleSerie}{` (${datefinal.getFullYear()})` }
+                                                    
+                                                 </div>
+                                                 <div className="details--date">
+                                                     {datefinal.toLocaleDateString('pt-BR')}
+                                                 </div>
+                                                 <div className="details--avalicao">
+                                                     Nota de Avaliaçõa: {voteMovie}
+                                                 </div>
+                                                 <div className="details--title--sinopse">
+                                                     Sinopse
+                                                 </div>
+                                                 <div className="details--sinopse">
+                                                     {overviewMovie}
+                                                 </div>
+                                                 <div className="details--button">
+                                                 <button onClick={()=> {
+                                                  setShowMe(false)
+                                                     }} className="card--button">
+                                                     Fechar
+                                                 </button>
+                                                 </div>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                        
                                 </div>
+                            </section>
                               :null
                              }     
                </div>
+               <h2 className="title--listing">
+               {/* Titulos das listas de filmes barra series */}
+               {title}
+           </h2>
                {/* Lista de filmes*/}
            <div className="movieRow--listtotal" style={{
                 marginLeft: scrolx,
@@ -116,15 +145,14 @@ function MovieRow( {title, items}) {
                             titleMovie = item.title;
                             titleSerie = item.name;
                             overviewMovie = item.overview;
+                            imagePri = item.poster_path;
                             imageMovie = item.backdrop_path;
                             dateMovie = item.release_date;
                             voteMovie = item.vote_average;
                             dateSeries = item.first_air_date;
                             setShowMe(true)
                         }}/>
-                        
                     </div>
-                    
                   ))}          
                </div>
            </div>
