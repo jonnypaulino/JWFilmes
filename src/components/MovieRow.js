@@ -14,7 +14,7 @@ var titleSerie;
 var dateSeries;
 var sizeImgCard;
 var imagePri;
-var datefinal
+var datefinal;
 
 
 function MovieRow( {title, items}) {
@@ -31,12 +31,9 @@ function MovieRow( {title, items}) {
         datefinal = dateSeries;
     }
 
-    if(overviewMovie == undefined){
-        overviewMovie = 'Sem Sinopse'
-    }
-
-    console.log(overviewMovie)
-    
+    if(overviewMovie === ''){
+        overviewMovie = "Sem Sinopse disponivel"
+    }  
     const [showMe, setShowMe] = useState(false);
     const [scrolx, setScrolx] = useState(0);
     console.log(window.innerWidth);
@@ -81,11 +78,15 @@ function MovieRow( {title, items}) {
                                         <tbody>
                                             <tr >
                                                 <td>
-                                                <img 
+                                                    <div>
+                                                    <img 
                                                 src={`https://image.tmdb.org/t/p/w300${imagePri}`} 
                                                 alt={titleMovie}
                                                  className="details--img"/>
+                                                    </div>
+                                                
                                                 </td>
+                                                <td>
                                                 <div className="details--title"> 
                                                      {titleMovie}{titleSerie}{` (${datefinal.getFullYear()})` }
                                                     
@@ -109,10 +110,10 @@ function MovieRow( {title, items}) {
                                                      Fechar
                                                  </button>
                                                  </div>
+                                                </td>
                                             </tr>
                                         </tbody>
-                                    </table>
-                                        
+                                    </table> 
                                 </div>
                             </section>
                               :null
