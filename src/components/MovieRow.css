@@ -1,5 +1,6 @@
 .movieRow {
     margin-bottom: 30px;
+    overflow: hidden;
 }
 
 .movieRow h2 {
@@ -135,20 +136,23 @@
     .movieRow--right {
     opacity: 1;
     }
+    .title--listing {
+        font-size: 20px;
+    }
     .card {
         padding-left: 5%;
         padding-right: 5%;
         width: 320px;
     }
     .card--title {
-        font-size: 20px;
+        font-size: 22px;
     }
     .card--date {
-        font-size: 12px;
+        font-size: 13px;
     }
     .card--button {
         width: 70%;
-        height: 4vh;
+        height: 6vh;
         background-color: #f1f1f3;
     }
 }

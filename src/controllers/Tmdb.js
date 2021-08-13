@@ -7,7 +7,9 @@ const API_BASE = 'https://api.themoviedb.org/3';
     Filmes mais populares
     Ultimos filmes lançados
     Filmes mais bem ranqueados
-    Series Populares    
+    Series Populares 
+    Series com boas avaliações
+    Episodios Lançados Recentementes
 */
 
 const basicFetch = async (endpoint) => {
@@ -18,33 +20,33 @@ const basicFetch = async (endpoint) => {
   const getHome =  async () => {
         return [
             {
-                slug: 'populares',
+                slug: 'filmesPopulares',
                 title: 'Filmes Populares',
                 items: await basicFetch(`/movie/popular?api_key=${API_KEY}&language=pt-BR`)
             },
             {
-                slug: 'lançamentos',
-                title: 'Flimes Lançados',
+                slug: 'filmesLançamentos',
+                title: 'Filmes Adicionados Recentemente',
                 items: await basicFetch(`/movie/now_playing?api_key=${API_KEY}&language=pt-BR&page=1`)
             },
             {
-                slug: 'alavalicao',
+                slug: 'filmesAlavalicao',
                 title: 'Filmes com Boas Avalições',
                 items: await basicFetch(`/movie/top_rated?api_key=${API_KEY}&language=pt-BR&page=1`) 
             },
             {
-                    slug: 'series',
-                    title: 'Series Populares',
-                    items:  await basicFetch(`/tv/popular?api_key=${API_KEY}&language=pt-BR&br&page=1`)  
+                slug: 'seriesPopulares',
+                title: 'Series Populares',
+                items:  await basicFetch(`/tv/popular?api_key=${API_KEY}&language=pt-BR&br&page=1`)  
             },
             {
-                slug: 'series',
+                slug: 'seriesAvaliacoes',
                 title: 'Series com Boas Avalições',
                 items:  await basicFetch(`/tv/top_rated?api_key=${API_KEY}&language=pt-BR&br&page=1`)  
             },
             {
-                slug: 'series',
-                title: 'Series com Boas Avalições',
+                slug: 'seriesLançamentos',
+                title: 'Episodios Lançados Recentementes',
                 items:  await basicFetch(`/tv/on_the_air?api_key=${API_KEY}&language=pt-BR&brpage=1`)  
             }
 

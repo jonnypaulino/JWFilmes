@@ -14,37 +14,21 @@ var titleSerie;
 var dateSeries;
 var sizeImgCard;
 
-function decimalAdjust(type, value, exp) {
-    // Se exp é indefinido ou zero...
-    if (typeof exp === 'undefined' || +exp === 0) {
-        return Math[type](value);
-    }
-    value = +value;
-    exp = +exp;
-    // Se o valor não é um número ou o exp não é inteiro...
-    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-        return NaN;
-    }
-    // Transformando para string
-    value = value.toString().split('e');
-    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
-    // Transformando de volta
-    value = value.toString().split('e');
-    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
-}
 
 function MovieRow( {title, items}) {
     
     const [showMe, setShowMe] = useState(false);
     const [scrolx, setScrolx] = useState(0);
-    if (!Math.round10) {
-		Math.round10 = function(value, exp) {
-			return decimalAdjust('round', value, exp);
-		};
-	}
-    
+
+    if(Math.round(window.innerWidth) > 1500){
+        sizeImgCard = 400
+    }else{
+        sizeImgCard = 300
+    }
+  
+    // Controles de movimentação
     const handleLeftArrow = () => {
-        let x = scrolx + Math.round(window.innerWidth / 5);
+        let x = scrolx + Math.round(window.innerWidth / 2);
             if(x>0){
                 x =0;
             }
@@ -53,54 +37,52 @@ function MovieRow( {title, items}) {
     }
 
     const handleRightArrow = () => {
-        let x = scrolx - Math.round(window.innerWidth / 5);
+        let x = scrolx - Math.round(window.innerWidth / 2);
         let fullSize = items.results.length * 150;
-        console.log(fullSize)
-        console.log(`1x=${x}`)
         if(x < window.innerWidth - fullSize){
-            if(window.innerWidth >= 1500){
-                if(x - 150 < -fullSize){
-                    x = (Math.round(window.innerWidth) / 5 - fullSize) + 20;
-              }
-            }
-
-            if(window.innerWidth < 1500) {
                 x = (window.innerWidth - fullSize) - 60;
-            }
         }
-        console.log(window.innerWidth)
-        console.log(`x=${x}`)
         setScrolx(x);
     }
+
     return (
         <div className="movieRow">
-           <h2>
+            
+           <h2 className="title--listing">
+               {/* Titulos das listas de filmes barra series */}
                {title}
            </h2>
            
            <div>
                {
                 showMe?
+                // Detalhes de cada filme/Serie
                     <div className="card" style={{
                         width: window.innerWidth * 0.7,
-                         }}>
+                        }}>
                         <Card className="card--total">
-                            <Image src={`https://image.tmdb.org/t/p/w300${imageMovie}`} wrapped ui={false} alt={imageMovie} className="card--img" />
+                            {/* Imagem do filme/Serie */}
+                            <Image src={`https://image.tmdb.org/t/p/w${sizeImgCard}${imageMovie}`} wrapped ui={false} alt={imageMovie} className="card--img" />
                                 <Card.Content>
+                                    {/* Titulo do filme/Serie */}
                                     <Card.Header className="card--title">{titleMovie}{titleSerie}</Card.Header>
                                         <Card.Meta>
+                                            {/* Data de lançamento de cada filme/Serie */}
                                           <span className="card--date">Data de lançamento:  {dateMovie} {dateSeries}</span>
                                         </Card.Meta>
                                             <div className="card--title">
                                                 Descrição
                                             </div>
+                                            {/* descrição do filme/Serie */}
                                         <Card.Description className="card--overview">
-                                        {overviewMovie}
+                                            {overviewMovie}
                                         </Card.Description>
                                     </Card.Content>
                                     <Card.Content extra className="card--vote">
+                                        {/* Avalição do filme/Serie */}
                                         Avaliação: {voteMovie}
                                  </Card.Content>
+                                    {/* Botão de Fechar os detalhes do filme/serie */}
                             <button onClick={()=> {
                                     setShowMe(false)
                                 }} className="card--button">
@@ -111,28 +93,23 @@ function MovieRow( {title, items}) {
                               :null
                              }     
                </div>
+               {/* Lista de filmes*/}
            <div className="movieRow--listtotal" style={{
                 marginLeft: scrolx,
-                width: items.results.length * 500,
-
-           }
+                width: items.results.length * 152,
+              }
            }>
+               {/* botões de nevagação  */}
                <div className="movieRow--left" onClick={handleLeftArrow}>
-            
                     <NavigateBeforeIcon style={{fontSize: '50px'}} />
-                                 
                </div>
                <div className="movieRow--right" onClick={handleRightArrow}> 
                     <NavigateNextIcon style={{fontSize: '50px'}} />
-
                </div>
-               
                <div className="movieRow--list">
-               
-                   
                   {items.results.length > 0 && items.results.map((item, key)=>(
                     <div key={key} className="movieRow--item">
-                        
+                        {/* imagens dos filmes onde podemos cliqcar para obter detalhes */}
                         <img src={`https://image.tmdb.org/t/p/w300${item.poster_path}`} alt={item.original_title} onClick={()=> {
                             setShowMe(false)
                             console.log(sizeImgCard);
@@ -148,9 +125,7 @@ function MovieRow( {title, items}) {
                         
                     </div>
                     
-                  ))}
-                     
-                                  
+                  ))}          
                </div>
            </div>
         </div>
